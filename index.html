@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISCC 2025 — International Scientific Conference on Complex Challenges</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+═══════════════════════════════════════ */
+:root {
+  --void: #04050a;
+  --deep: #080c18;
+  --panel: #0d1220;
+  --surface: #121828;
+  --border: rgba(100,160,255,0.12);
+  --border2: rgba(100,160,255,0.22);
+  --blue: #4a8fff;
+  --blue-dim: rgba(74,143,255,0.15);
+  --blue-glow: rgba(74,143,255,0.35);
+  --cyan: #3dd6f5;
+  --cyan-dim: rgba(61,214,245,0.12);
+  --gold: #e8c96a;
+  --gold-dim: rgba(232,201,106,0.12);
+  --red: #ff5e57;
+  --text: #dde6f5;
+  --text-mid: rgba(221,230,245,0.6);
+  --text-dim: rgba(221,230,245,0.3);
+  --radius: 2px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'IBM Plex Sans',sans-serif;
+  background:var(--void);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ═══ CUSTOM CURSOR ═══ */
+#cur{position:fixed;width:6px;height:6px;background:var(--cyan);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
+#cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(61,214,245,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s}
+
+/* ═══ CANVAS BACKGROUND ═══ */
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
+
+/* ═══ NAV ═══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 3rem;
+  background:rgba(4,5,10,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+  transition:padding .3s;
+}
+nav.scrolled{padding:.7rem 3rem}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.5rem;letter-spacing:.12em;
+  color:var(--text);text-decoration:none;
+  display:flex;align-items:center;gap:.6rem;
+}
+.nav-logo-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.62rem;letter-spacing:.14em;
+  color:var(--cyan);
+  border:1px solid rgba(61,214,245,.3);
+  padding:.2rem .5rem;margin-top:.15rem;
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-mid);text-decoration:none;transition:color .2s;
+  position:relative;padding-bottom:3px;
+}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--cyan);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-reg{
+  font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--void);background:var(--cyan);
+  padding:.55rem 1.3rem;text-decoration:none;
+  transition:background .2s,transform .2s;
+}
+.nav-reg:hover{background:#fff;transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:22px;height:1px;background:var(--text-mid);transition:all .3s}
+
+/* ═══ COUNTDOWN ═══ */
+.countdown-bar{
+  position:relative;z-index:10;
+  background:rgba(61,214,245,.06);
+  border-bottom:1px solid rgba(61,214,245,.15);
+  padding:.65rem 3rem;
+  display:flex;align-items:center;justify-content:center;gap:2.5rem;
+  margin-top:60px;
+}
+.cd-label{font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);opacity:.7}
+.cd-blocks{display:flex;gap:1.5rem;align-items:center}
+.cd-block{display:flex;flex-direction:column;align-items:center;gap:.1rem}
+.cd-num{
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.06em;
+  color:var(--cyan);line-height:1;
+  text-shadow:0 0 20px rgba(61,214,245,.5);
+}
+.cd-unit{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim)}
+.cd-sep{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--text-dim);margin-bottom:.8rem}
+
+/* ═══ HERO ═══ */
+.hero{
+  position:relative;z-index:10;
+  min-height:92vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:5rem 3rem 4rem;
+  overflow:hidden;
+}
+.hero-grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(100,160,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(100,160,255,.04) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+.hero-content{position:relative;z-index:2;max-width:900px}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.8rem;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);
+  margin-bottom:2rem;
+  opacity:0;animation:fadeUp .8s .1s forwards;
+}
+.hero-tag-dot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,8vw,8rem);
+  font-weight:400;line-height:.95;letter-spacing:.02em;
+  color:var(--text);margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp .9s .2s forwards;
+}
+.hero h1 .accent{color:var(--cyan)}
+.hero h1 .accent2{color:var(--gold)}
+.hero-sub{
+  font-size:1rem;font-weight:300;line-height:1.8;
+  color:var(--text-mid);max-width:600px;margin-bottom:2.5rem;
+  opacity:0;animation:fadeUp .9s .35s forwards;
+}
+.hero-meta{
+  display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:3rem;
+  opacity:0;animation:fadeUp .9s .5s forwards;
+}
+.hero-meta-item{display:flex;flex-direction:column;gap:.2rem}
+.hmi-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+.hmi-val{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--cyan);letter-spacing:.06em}
+.hero-actions{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .9s .65s forwards;
+}
+.btn-primary{
+  background:var(--cyan);color:var(--void);
+  padding:.85rem 2rem;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;transition:all .25s;display:inline-block;
+}
+.btn-primary:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(61,214,245,.3)}
+.btn-outline{
+  border:1px solid var(--border2);color:var(--text-mid);
+  padding:.85rem 2rem;font-size:.75rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;transition:all .25s;display:inline-block;
+}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+
+/* ═══ PARTICLE STATS (hero right) ═══ */
+.hero-right{
+  position:absolute;right:3rem;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:1.5rem;
+  opacity:0;animation:fadeIn 1.2s .9s forwards;
+}
+@media(max-width:900px){.hero-right{display:none}}
+.stat-box{
+  background:rgba(13,18,32,.7);border:1px solid var(--border);
+  padding:1.2rem 1.5rem;min-width:160px;
+  backdrop-filter:blur(8px);
+}
+.stat-box-num{
+  font-family:'Bebas Neue',sans-serif;font-size:2.4rem;line-height:1;
+  color:var(--cyan);text-shadow:0 0 15px rgba(61,214,245,.4);
+}
+.stat-box-label{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-top:.3rem}
+
+/* ═══ SECTION BASE ═══ */
+section{position:relative;z-index:10;padding:6rem 3rem}
+.sec-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:1rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.sec-eyebrow::before{content:'';width:24px;height:1px;background:var(--cyan)}
+.sec-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,5vw,4rem);
+  font-weight:400;letter-spacing:.04em;line-height:1;
+  margin-bottom:1rem;
+}
+.sec-title .hl{color:var(--cyan)}
+
+/* ═══ THEMES SECTION ═══ */
+.themes-section{background:var(--deep)}
+.themes-header{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:4rem}
+.themes-desc{font-size:.9rem;line-height:1.8;color:var(--text-mid);font-weight:300}
+.themes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.theme-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:2rem;position:relative;overflow:hidden;
+  cursor:default;transition:border-color .3s,transform .3s;
+}
+.theme-card:hover{border-color:var(--cyan);transform:translateY(-3px)}
+.theme-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  transform:scaleX(0);transition:transform .4s;transform-origin:left;
+}
+.theme-card:hover::before{transform:scaleX(1)}
+.theme-num{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;
+  letter-spacing:.15em;color:var(--cyan);opacity:.6;margin-bottom:1rem;
+}
+.theme-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:1rem;font-weight:700;line-height:1.3;margin-bottom:.8rem;
+}
+.theme-text{font-size:.8rem;line-height:1.7;color:var(--text-mid);font-weight:300}
+
+/* ═══ ROLLING TICKER ═══ */
+.ticker-wrap{
+  background:var(--panel);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:.9rem 0;overflow:hidden;position:relative;
+}
+.ticker-wrap::before,.ticker-wrap::after{
+  content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;
+}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--panel),transparent)}
+.ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--panel),transparent)}
+.ticker-track{
+  display:flex;gap:0;width:max-content;
+  animation:ticker 50s linear infinite;
+}
+.ticker-track:hover{animation-play-state:paused}
+.t-item{
+  display:flex;align-items:center;gap:1.5rem;padding:0 2rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;
+  letter-spacing:.1em;color:var(--text-mid);white-space:nowrap;
+  transition:color .2s;
+}
+.t-item:hover{color:var(--cyan);cursor:default}
+.t-dot{width:3px;height:3px;background:var(--cyan);border-radius:50%;opacity:.4}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══ INTERACTIVE PROGRAM (JS-driven) ═══ */
+.program-section{background:var(--void)}
+.program-tabs{display:flex;gap:0;margin:2.5rem 0 0;border-bottom:1px solid var(--border)}
+.prog-tab{
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);padding:.9rem 1.8rem;cursor:pointer;border-bottom:2px solid transparent;
+  transition:all .25s;background:transparent;border-top:none;border-left:none;border-right:none;
+  font-family:'IBM Plex Mono',monospace;
+}
+.prog-tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.prog-tab:hover{color:var(--text)}
+.prog-content{display:none;margin-top:0;animation:fadeIn .4s}
+.prog-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.prog-day-header{
+  display:grid;grid-template-columns:90px 1fr 180px 140px;
+  padding:.6rem 1.5rem;
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);border-bottom:1px solid var(--border);
+}
+.prog-rows{border:1px solid var(--border)}
+.prog-row{
+  display:grid;grid-template-columns:90px 1fr 180px 140px;
+  padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);
+  align-items:start;cursor:pointer;transition:background .2s;
+}
+.prog-row:last-child{border-bottom:none}
+.prog-row:hover{background:var(--panel)}
+.prog-row.expanded{background:var(--panel)}
+.prog-time{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;
+  color:var(--cyan);letter-spacing:.06em;padding-top:.1rem;
+}
+.prog-title-wrap{}
+.prog-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:.95rem;font-weight:700;line-height:1.3;margin-bottom:.2rem;
+}
+.prog-speaker-name{font-size:.78rem;color:var(--text-mid);font-weight:300}
+.prog-type-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.25rem .65rem;display:inline-flex;align-items:center;gap:.4rem;
+  border-radius:1px;
+}
+.badge-keynote{background:rgba(232,201,106,.12);color:var(--gold);border:1px solid rgba(232,201,106,.25)}
+.badge-panel{background:rgba(61,214,245,.1);color:var(--cyan);border:1px solid rgba(61,214,245,.2)}
+.badge-workshop{background:rgba(74,143,255,.1);color:var(--blue);border:1px solid rgba(74,143,255,.2)}
+.badge-break{background:rgba(221,230,245,.06);color:var(--text-dim);border:1px solid var(--border)}
+.badge-poster{background:rgba(255,94,87,.1);color:var(--red);border:1px solid rgba(255,94,87,.2)}
+.prog-room{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--text-dim);letter-spacing:.06em}
+.prog-detail{
+  display:none;grid-column:1/-1;
+  padding:1rem 0 .3rem;
+  font-size:.82rem;line-height:1.75;color:var(--text-mid);font-weight:300;
+  border-top:1px solid var(--border);margin-top:.9rem;
+}
+.prog-row.expanded .prog-detail{display:block}
+.prog-arrow{
+  justify-self:end;color:var(--text-dim);font-size:.9rem;
+  transition:transform .3s;margin-top:.2rem;
+}
+.prog-row.expanded .prog-arrow{transform:rotate(90deg);color:var(--cyan)}
+
+/* ═══ SCIENTIFIC COMMITTEE ═══ */
+.committee-section{background:var(--deep)}
+.committee-intro{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:4rem}
+.committee-filter{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+.cf-btn{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem .9rem;border:1px solid var(--border2);
+  color:var(--text-dim);background:transparent;cursor:pointer;transition:all .25s;
+}
+.cf-btn.active{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.cf-btn:hover{border-color:var(--blue);color:var(--blue)}
+.committee-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.member-card{
+  background:var(--panel);border:1px solid var(--border);
+  overflow:hidden;transition:transform .35s,box-shadow .35s;
+  cursor:default;
+}
+.member-card:hover{transform:translateY(-5px);box-shadow:0 15px 40px rgba(0,0,0,.5),0 0 0 1px var(--border2)}
+.member-header{
+  height:140px;position:relative;display:flex;
+  align-items:center;justify-content:center;overflow:hidden;
+}
+.member-initial{
+  font-family:'Bebas Neue',sans-serif;font-size:5rem;
+  color:rgba(61,214,245,.12);line-height:1;user-select:none;
+}
+.member-flag{position:absolute;top:.9rem;right:.9rem;font-size:1.3rem}
+.member-body{padding:1.4rem}
+.member-name{
+  font-family:'Libre Baskerville',serif;
+  font-size:1rem;font-weight:700;margin-bottom:.25rem;line-height:1.2;
+}
+.member-role{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.8rem;
+}
+.member-institution{font-size:.78rem;color:var(--blue);font-weight:300;margin-bottom:.7rem;font-style:italic}
+.member-bio{font-size:.78rem;line-height:1.65;color:var(--text-mid);font-weight:300;margin-bottom:.9rem}
+.member-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem}
+.m-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:.56rem;
+  padding:.18rem .55rem;border:1px solid var(--border);
+  color:var(--text-dim);letter-spacing:.04em;
+}
+.member-linkedin{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.72rem;font-weight:500;letter-spacing:.06em;
+  color:var(--cyan);text-decoration:none;
+  border-bottom:1px solid rgba(61,214,245,.25);padding-bottom:1px;
+  transition:all .2s;
+}
+.member-linkedin:hover{color:#fff;border-color:#fff}
+
+/* ═══ SUBMISSION — INTERACTIVE FORM ═══ */
+.submit-section{background:var(--void)}
+.submit-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3.5rem;align-items:start}
+.submit-info{}
+.s-block{margin-bottom:2.2rem}
+.s-block-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.5rem;
+}
+.s-block-val{font-size:.88rem;color:var(--text-mid);font-weight:300;line-height:1.65}
+.s-block-val a{color:var(--text-mid);text-decoration:none;transition:color .2s}
+.s-block-val a:hover{color:var(--cyan)}
+.deadline-list{list-style:none;display:flex;flex-direction:column;gap:.8rem}
+.dl-item{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;
+  padding:.7rem 1rem;background:var(--panel);border:1px solid var(--border);
+}
+.dl-event{font-size:.82rem;color:var(--text-mid);font-weight:300}
+.dl-date{
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;
+  color:var(--gold);letter-spacing:.06em;white-space:nowrap;
+}
+.dl-item.urgent{border-color:rgba(255,94,87,.3)}
+.dl-item.urgent .dl-date{color:var(--red)}
+
+/* Form */
+.abstract-form{display:flex;flex-direction:column;gap:1.1rem}
+.f-label{
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-dim);display:block;margin-bottom:.4rem;
+}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.f-input,.f-select,.f-textarea{
+  width:100%;background:var(--panel);border:1px solid var(--border);
+  color:var(--text);padding:.75rem 1rem;
+  font-family:'IBM Plex Sans',sans-serif;font-size:.84rem;font-weight:300;
+  outline:none;transition:border-color .25s;border-radius:0;appearance:none;
+}
+.f-input::placeholder,.f-textarea::placeholder{color:var(--text-dim)}
+.f-input:focus,.f-select:focus,.f-textarea:focus{border-color:var(--cyan)}
+.f-select option{background:var(--panel)}
+.f-textarea{resize:vertical;min-height:110px}
+.f-char-counter{
+  font-family:'IBM Plex Mono',monospace;font-size:.58rem;
+  color:var(--text-dim);text-align:right;margin-top:.3rem;
+  transition:color .3s;
+}
+.f-char-counter.warn{color:var(--gold)}
+.f-char-counter.danger{color:var(--red)}
+.progress-bar-wrap{height:2px;background:var(--border);margin-top:.3rem;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--cyan);width:0%;transition:width .3s,background .3s}
+.progress-bar-fill.warn{background:var(--gold)}
+.progress-bar-fill.danger{background:var(--red)}
+.btn-submit{
+  background:var(--cyan);color:var(--void);
+  padding:.9rem 2.5rem;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  border:none;cursor:pointer;transition:all .25s;
+  font-family:'IBM Plex Sans',sans-serif;align-self:flex-start;
+}
+.btn-submit:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(61,214,245,.25)}
+.form-success{
+  display:none;background:rgba(61,214,245,.06);border:1px solid rgba(61,214,245,.3);
+  padding:1.5rem;font-size:.88rem;line-height:1.6;color:var(--cyan);
+}
+
+/* ═══ MAP / VENUES ═══ */
+.venue-section{background:var(--deep)}
+.venue-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3rem;align-items:start}
+.venue-map-canvas{
+  background:var(--panel);border:1px solid var(--border);
+  position:relative;overflow:hidden;height:380px;
+}
+.venue-cards{display:flex;flex-direction:column;gap:1rem}
+.venue-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:1.5rem;transition:border-color .25s;
+  cursor:pointer;
+}
+.venue-card.active,.venue-card:hover{border-color:var(--cyan)}
+.vc-name{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.vc-type{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:.5rem}
+.vc-addr{font-size:.8rem;color:var(--text-mid);font-weight:300}
+
+/* ═══ CONTACT ═══ */
+.contact-section{background:var(--void)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;margin-top:3rem;align-items:start}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+
+/* ═══ FOOTER ═══ */
+footer{
+  background:#020408;border-top:1px solid var(--border);
+  padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;position:relative;z-index:10;
+}
+.footer-brand{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.12em;color:var(--text-mid)}
+footer p{font-size:.72rem;color:var(--text-dim)}
+.footer-links{display:flex;gap:1.5rem;list-style:none}
+.footer-links a{font-size:.7rem;color:var(--text-dim);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.footer-links a:hover{color:var(--cyan)}
+
+/* ═══ REVEAL ═══ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+.reveal.vis{opacity:1;transform:none}
+.rd1{transition-delay:.1s}.rd2{transition-delay:.18s}.rd3{transition-delay:.26s}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* ═══ MOBILE NAV ═══ */
+.mob-drawer{
+  display:none;position:fixed;top:0;right:-100%;width:72%;max-width:300px;
+  height:100vh;background:var(--panel);border-left:1px solid var(--border);
+  z-index:300;flex-direction:column;padding:4.5rem 2rem 2rem;
+  transition:right .4s ease;
+}
+.mob-drawer.open{right:0}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:299}
+.mob-overlay.open{display:block}
+.mob-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;color:var(--text-mid);font-size:1.3rem;cursor:pointer}
+.mob-drawer a{
+  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.08em;
+  color:var(--text-mid);text-decoration:none;padding:.6rem 0;
+  border-bottom:1px solid var(--border);transition:color .2s;
+}
+.mob-drawer a:hover{color:var(--cyan)}
+
+/* ─ HEADER BG VARIANTS ─ */
+.mhbg-1{background:linear-gradient(135deg,#0a1525 0%,#0f1e35 100%)}
+.mhbg-2{background:linear-gradient(135deg,#0a1520 0%,#0d1e28 100%)}
+.mhbg-3{background:linear-gradient(135deg,#100a20 0%,#180f30 100%)}
+.mhbg-4{background:linear-gradient(135deg,#0a1818 0%,#0f2525 100%)}
+.mhbg-5{background:linear-gradient(135deg,#1a100a 0%,#281810 100%)}
+.mhbg-6{background:linear-gradient(135deg,#0a1015 0%,#101828 100%)}
+.mhbg-7{background:linear-gradient(135deg,#101018 0%,#181825 100%)}
+.mhbg-8{background:linear-gradient(135deg,#0a1a10 0%,#102818 100%)}
+.mhbg-9{background:linear-gradient(135deg,#150a15 0%,#220f22 100%)}
+
+/* ─ RESPONSIVE ─ */
+@media(max-width:1024px){
+  .themes-grid{grid-template-columns:1fr 1fr}
+  .committee-grid{grid-template-columns:1fr 1fr}
+  .submit-grid{grid-template-columns:1fr}
+  .venue-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links,.nav-reg{display:none}
+  .hamburger{display:flex}
+  section{padding:4rem 1.5rem}
+  .hero{padding:4rem 1.5rem}
+  .themes-grid{grid-template-columns:1fr}
+  .committee-grid{grid-template-columns:1fr}
+  .themes-header{grid-template-columns:1fr;gap:1.5rem}
+  .committee-intro{grid-template-columns:1fr;gap:1.5rem}
+  .prog-day-header,.prog-row{grid-template-columns:70px 1fr}
+  .prog-type-badge,.prog-room{display:none}
+  .countdown-bar{flex-direction:column;gap:1rem;padding:1rem 1.5rem}
+  .f-row{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .hero h1{font-size:3rem}
+  .hero-meta{gap:1.5rem}
+  .hero-actions{flex-direction:column;align-items:flex-start}
+  .btn-primary,.btn-outline{width:100%;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- MOBILE OVERLAY + DRAWER -->
+<div class="mob-overlay" id="mobOverlay" onclick="closeMob()"></div>
+<div class="mob-drawer" id="mobDrawer">
+  <button class="mob-close" onclick="closeMob()">✕</button>
+  <a href="#themes" onclick="closeMob()">Themes</a>
+  <a href="#program" onclick="closeMob()">Program</a>
+  <a href="#committee" onclick="closeMob()">Committee</a>
+  <a href="#submit" onclick="closeMob()">Submit</a>
+  <a href="#venue" onclick="closeMob()">Venue</a>
+  <a href="#contact" onclick="closeMob()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    ISCC <span class="nav-logo-badge">2025</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#themes">Themes</a></li>
+    <li><a href="#program">Program</a></li>
+    <li><a href="#committee">Committee</a></li>
+    <li><a href="#submit">Submit</a></li>
+    <li><a href="#venue">Venue</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#submit" class="nav-reg">Register / Submit</a>
+  <div class="hamburger" onclick="openMob()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- COUNTDOWN -->
+<div class="countdown-bar" style="position:relative;z-index:10">
+  <span class="cd-label">Abstract Submission Closes In</span>
+  <div class="cd-blocks">
+    <div class="cd-block"><span class="cd-num" id="cd-days">00</span><span class="cd-unit">Days</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block"><span class="cd-num" id="cd-hours">00</span><span class="cd-unit">Hrs</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block"><span class="cd-num" id="cd-mins">00</span><span class="cd-unit">Min</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-block"><span class="cd-num" id="cd-secs">00</span><span class="cd-unit">Sec</span></div>
+  </div>
+  <span class="cd-label">Conference Date: September 18–20, 2025 · Berlin</span>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag"><span class="hero-tag-dot"></span> Call for Papers Now Open</div>
+    <h1>
+      INTERNATIONAL<br>
+      SCIENTIFIC<br>
+      <span class="accent">CONFERENCE</span><br>
+      <span class="accent2">2025</span>
+    </h1>
+    <p class="hero-sub">Complex Challenges in the Age of Digital Transformation: Interdisciplinary Perspectives from German-Speaking Academia and Beyond</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="hmi-label">Date</span><span class="hmi-val">18–20 Sept 2025</span></div>
+      <div class="hero-meta-item"><span class="hmi-label">Location</span><span class="hmi-val">Berlin, Germany</span></div>
+      <div class="hero-meta-item"><span class="hmi-label">Format</span><span class="hmi-val">Hybrid</span></div>
+      <div class="hero-meta-item"><span class="hmi-label">Language</span><span class="hmi-val">EN / DE</span></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#submit" class="btn-primary">Submit Abstract</a>
+      <a href="#program" class="btn-outline">View Program</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-box"><div class="stat-box-num" id="cnt-papers">0</div><div class="stat-box-label">Submissions</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="cnt-speakers">0</div><div class="stat-box-label">Speakers</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="cnt-countries">0</div><div class="stat-box-label">Countries</div></div>
+    <div class="stat-box"><div class="stat-box-num" id="cnt-sessions">0</div><div class="stat-box-label">Sessions</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="position:relative;z-index:10">
+  <div class="ticker-track" id="tickerTrack">
+    <!-- JS will populate -->
+  </div>
+</div>
+
+<!-- CONFERENCE THEMES -->
+<section class="themes-section" id="themes">
+  <div class="themes-header reveal">
+    <div>
+      <div class="sec-eyebrow">Conference Themes</div>
+      <h2 class="sec-title">Six <span class="hl">Research</span> Tracks</h2>
+    </div>
+    <p class="themes-desc">Contributions are welcomed across six interdisciplinary research tracks, encouraging dialogue between German-speaking and international scholarship, digital innovation, and policy-relevant science.</p>
+  </div>
+  <div class="themes-grid" id="themesGrid">
+    <!-- JS rendered -->
+  </div>
+</section>
+
+<!-- PROGRAM -->
+<section class="program-section" id="program">
+  <div class="reveal">
+    <div class="sec-eyebrow">Conference Program</div>
+    <h2 class="sec-title">Three <span class="hl">Days</span> of Science</h2>
+    <p style="font-size:.85rem;color:var(--text-dim);margin-top:.5rem;font-weight:300">Click any session to expand details.</p>
+  </div>
+  <div class="program-tabs" id="progTabs"><!-- JS --></div>
+  <div id="progContents"><!-- JS --></div>
+</section>
+
+<!-- SCIENTIFIC COMMITTEE -->
+<section class="committee-section" id="committee">
+  <div class="committee-intro reveal">
+    <div>
+      <div class="sec-eyebrow">Scientific Committee</div>
+      <h2 class="sec-title">Nine <span class="hl">Minds</span></h2>
+    </div>
+    <p class="themes-desc">An international scientific committee drawn from leading German-speaking universities, digital institutions, and research centres across Europe and beyond — ensuring rigorous peer review and interdisciplinary breadth.</p>
+  </div>
+  <div class="committee-filter reveal" id="committeeFilter"><!-- JS --></div>
+  <div class="committee-grid" id="committeeGrid"><!-- JS --></div>
+</section>
+
+<!-- ABSTRACT SUBMISSION -->
+<section class="submit-section" id="submit">
+  <div class="reveal">
+    <div class="sec-eyebrow">Participate</div>
+    <h2 class="sec-title">Submit Your <span class="hl">Abstract</span></h2>
+  </div>
+  <div class="submit-grid reveal">
+    <div class="submit-info">
+      <div class="s-block">
+        <div class="s-block-label">Key Deadlines</div>
+        <ul class="deadline-list" id="deadlineList"><!-- JS --></ul>
+      </div>
+      <div class="s-block">
+        <div class="s-block-label">Submission Guidelines</div>
+        <div class="s-block-val">Abstracts must be 300–500 words in English or German. Authors must indicate their preferred track and presentation format. All submissions undergo double-blind peer review by the Scientific Committee.</div>
+      </div>
+      <div class="s-block">
+        <div class="s-block-label">Publication</div>
+        <div class="s-block-val">Selected papers will be published in the Conference Proceedings (ISBN-registered). Extended versions may be submitted to partner journals including <em>Zeitschrift für Sozialwissenschaften</em> and the <em>Journal of Digital Governance</em>.</div>
+      </div>
+      <div class="s-block">
+        <div class="s-block-label">Contact</div>
+        <div class="s-block-val"><a href="mailto:submissions@iscc2025.org">submissions@iscc2025.org</a></div>
+      </div>
+    </div>
+    <div>
+      <form class="abstract-form" id="abstractForm" onsubmit="return handleFormSubmit(event)">
+        <div class="f-row">
+          <div><label class="f-label">First Name</label><input class="f-input" type="text" placeholder="Max" required></div>
+          <div><label class="f-label">Last Name</label><input class="f-input" type="text" placeholder="Müller" required></div>
+        </div>
+        <div><label class="f-label">Email Address</label><input class="f-input" type="email" placeholder="m.mueller@uni-berlin.de" required></div>
+        <div><label class="f-label">Institution / University</label><input class="f-input" type="text" placeholder="Humboldt-Universität zu Berlin" required></div>
+        <div>
+          <label class="f-label">Research Track</label>
+          <select class="f-select" required id="trackSelect">
+            <option value="">Select track…</option>
+          </select>
+        </div>
+        <div>
+          <label class="f-label">Presentation Format</label>
+          <select class="f-select" required>
+            <option value="">Select format…</option>
+            <option>Oral Presentation (20 min)</option>
+            <option>Poster Session</option>
+            <option>Workshop / Panel</option>
+            <option>Lightning Talk (7 min)</option>
+          </select>
+        </div>
+        <div>
+          <label class="f-label">Abstract Title</label>
+          <input class="f-input" type="text" placeholder="Enter your abstract title" required id="titleInput">
+        </div>
+        <div>
+          <label class="f-label">Abstract Text <span id="charCount" style="color:var(--text-dim)">(0 / 500 words)</span></label>
+          <textarea class="f-textarea" id="abstractText" rows="6" placeholder="Enter your abstract (300–500 words)…" oninput="updateWordCount(this)"></textarea>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progBar"></div></div>
+        </div>
+        <div class="f-row">
+          <div><label class="f-label">Language of Submission</label>
+            <select class="f-select"><option>English</option><option>German</option></select>
+          </div>
+          <div><label class="f-label">Co-Authors (optional)</label><input class="f-input" type="text" placeholder="Name, Institution"></div>
+        </div>
+        <button type="submit" class="btn-submit" id="submitAbstractBtn">Submit Abstract ›</button>
+        <div class="form-success" id="formSuccess">
+          ✓ Abstract received. You will receive a confirmation email within 24 hours. Review results will be communicated by 15 July 2025.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- VENUE / MAP -->
+<section class="venue-section" id="venue">
+  <div class="reveal">
+    <div class="sec-eyebrow">Location</div>
+    <h2 class="sec-title">Conference <span class="hl">Venues</span></h2>
+  </div>
+  <div class="venue-grid reveal">
+    <div class="venue-map-canvas">
+      <canvas id="venueCanvas" style="width:100%;height:100%"></canvas>
+    </div>
+    <div class="venue-cards" id="venueCards"><!-- JS --></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="reveal">
+    <div class="sec-eyebrow">Get In Touch</div>
+    <h2 class="sec-title">Contact the <span class="hl">Secretariat</span></h2>
+  </div>
+  <div class="contact-grid reveal">
+    <div>
+      <div class="s-block"><div class="s-block-label">Conference Secretariat</div><div class="s-block-val">ISCC 2025 Organising Committee<br>c/o Humboldt-Universität zu Berlin<br>Unter den Linden 6, 10099 Berlin, Germany</div></div>
+      <div class="s-block"><div class="s-block-label">General Inquiries</div><div class="s-block-val"><a href="mailto:info@iscc2025.org">info@iscc2025.org</a></div></div>
+      <div class="s-block"><div class="s-block-label">Abstract Submissions</div><div class="s-block-val"><a href="mailto:submissions@iscc2025.org">submissions@iscc2025.org</a></div></div>
+      <div class="s-block"><div class="s-block-label">Press & Media</div><div class="s-block-val"><a href="mailto:press@iscc2025.org">press@iscc2025.org</a></div></div>
+      <div class="s-block"><div class="s-block-label">Conference Languages</div><div class="s-block-val">English · German</div></div>
+    </div>
+    <form class="contact-form" onsubmit="return handleContactSubmit(event)">
+      <div class="f-row">
+        <div><label class="f-label">Name</label><input class="f-input" type="text" placeholder="Your name" required></div>
+        <div><label class="f-label">Email</label><input class="f-input" type="email" placeholder="your@email.com" required></div>
+      </div>
+      <div><label class="f-label">Subject</label>
+        <select class="f-select">
+          <option>General Inquiry</option>
+          <option>Registration Question</option>
+          <option>Submission Support</option>
+          <option>Press & Media</option>
+          <option>Sponsorship</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div><label class="f-label">Message</label><textarea class="f-textarea" placeholder="Your message…" rows="5" required></textarea></div>
+      <button type="submit" class="btn-submit" id="contactBtn">Send Message ›</button>
+      <div class="form-success" id="contactSuccess">✓ Message sent. We'll respond within 2 business days.</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">ISCC 2025</div>
+  <p>© 2025 International Scientific Conference on Complex Challenges · Berlin, Germany</p>
+  <ul class="footer-links">
+    <li><a href="#">Imprint</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Code of Conduct</a></li>
+    <li><a href="#">LinkedIn</a></li>
+  </ul>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT — DATA + INTERACTIVITY
+═══════════════════════════════════════════ -->
+<script>
+/* ══════════════════════════════════════════
+   JSON DATA STORE
+══════════════════════════════════════════ */
+const DATA = {
+
+  stats: { papers: 247, speakers: 64, countries: 32, sessions: 28 },
+
+  tickerItems: [
+    "Humboldt-Universität zu Berlin","TU Munich","University of Vienna",
+    "ETH Zurich","FU Berlin","Universität Zürich","TU Graz","RWTH Aachen",
+    "Universität Hamburg","University of Bern","FAU Erlangen-Nürnberg",
+    "University of Innsbruck","Karlsruhe Institute of Technology","University of Basel",
+    "Heidelberg University","WU Vienna","Leuphana Universität"
+  ],
+
+  themes: [
+    { num:"T–01", title:"Digital Governance & Public Administration", text:"Examining algorithmic decision-making, e-government systems, and digital sovereignty in the German-speaking regulatory context." },
+    { num:"T–02", title:"Sustainability & Complex Systems", text:"Interdisciplinary approaches to environmental governance, circular economy models, and resilience in socio-ecological systems." },
+    { num:"T–03", title:"AI, Society & Ethics", text:"Critical perspectives on artificial intelligence deployment, bias, accountability frameworks, and the societal implications of machine learning." },
+    { num:"T–04", title:"Digital Education & Learning Sciences", text:"Innovative pedagogies, learning analytics, MOOCs, and the transformation of higher education in the digital age." },
+    { num:"T–05", title:"Data Science & Quantitative Methods", text:"Advances in computational social science, mixed-methods research design, and big data approaches to social inquiry." },
+    { num:"T–06", title:"Global Development & Policy Evaluation", text:"Monitoring, evaluation, and learning in international development cooperation, with emphasis on German bilateral partnerships." }
+  ],
+
+  program: [
+    {
+      day: "Day 1 — Thu 18 Sept",
+      sessions: [
+        { time:"08:30", title:"Registration & Welcome Coffee", speaker:"Organising Committee", type:"break", room:"Foyer A", detail:"Registration desk open. Networking and coffee in the main foyer." },
+        { time:"09:30", title:"Opening Ceremony & Keynote Address", speaker:"Prof. Dr. Katharina Müller (HU Berlin)", type:"keynote", room:"Main Auditorium", detail:"Prof. Müller opens the conference with a keynote on 'Digital Transformation as a Complex Challenge: Rethinking Governance in the 21st Century'." },
+        { time:"11:00", title:"Track T–01: Algorithmic Governance", speaker:"Panel of 4 presenters", type:"panel", room:"Hall B", detail:"Four short presentations exploring regulatory frameworks for algorithmic public services in Austria, Switzerland, and Germany, followed by structured Q&A." },
+        { time:"13:00", title:"Lunch & Poster Session I", speaker:"Various", type:"poster", room:"Exhibition Hall", detail:"Buffet lunch with concurrent poster session featuring 18 posters from emerging researchers." },
+        { time:"14:30", title:"Workshop: Reproducible Research in the Social Sciences", speaker:"Dr. Reto Schweizer (ETH Zurich)", type:"workshop", room:"Room C1", detail:"Hands-on workshop covering version control, open data practices, and reproducibility standards for social science research." },
+        { time:"16:30", title:"Coffee Break & Networking", speaker:"", type:"break", room:"Foyer A", detail:"" },
+        { time:"17:00", title:"Evening Keynote: AI and the Future of European Universities", speaker:"Prof. Dr. Thomas Hofmann (TU Munich)", type:"keynote", room:"Main Auditorium", detail:"A provocative keynote examining how generative AI is reshaping academic knowledge production, teaching, and research careers in German-speaking higher education." },
+        { time:"19:00", title:"Welcome Reception", speaker:"", type:"break", room:"Rooftop Terrace", detail:"Informal welcome reception for all delegates and speakers." }
+      ]
+    },
+    {
+      day: "Day 2 — Fri 19 Sept",
+      sessions: [
+        { time:"09:00", title:"Keynote: Sustainability Science Beyond Disciplinary Silos", speaker:"Prof. Dr. Aizat Kydyralieva (Universität Wien)", type:"keynote", room:"Main Auditorium", detail:"Drawing on fifteen years of transdisciplinary research, Prof. Kydyralieva presents a new integrative framework for sustainability science in complex socio-ecological contexts." },
+        { time:"10:30", title:"Parallel Track T–02: Circular Economy Models", speaker:"Panel of 5 presenters", type:"panel", room:"Hall B", detail:"Comparative case studies from Germany, Switzerland, and Austria, examining institutional factors enabling circular economy transitions in urban settings." },
+        { time:"10:30", title:"Parallel Track T–04: Learning Analytics", speaker:"Panel of 4 presenters", type:"panel", room:"Hall C", detail:"Research presentations on data-driven approaches to student success prediction, learning pathway optimisation, and ethical AI in digital education platforms." },
+        { time:"13:00", title:"Lunch & Poster Session II", speaker:"Various", type:"poster", room:"Exhibition Hall", detail:"Lunch with 22 poster presentations from doctoral researchers and postdoctoral fellows." },
+        { time:"14:30", title:"Workshop: Evaluation Methods in Development Cooperation", speaker:"Dr. María Rodríguez-Sanz (Universität Basel)", type:"workshop", room:"Room C2", detail:"Interactive workshop on DAC evaluation criteria, theory of change, and participatory M&E design for international development projects." },
+        { time:"16:30", title:"Track T–05: Computational Social Science", speaker:"Panel of 4 presenters", type:"panel", room:"Hall B", detail:"Showcasing cutting-edge applications of NLP, network analysis, and agent-based modelling to social science research questions." },
+        { time:"18:30", title:"Conference Dinner", speaker:"", type:"break", room:"Gendarmenmarkt", detail:"Formal conference dinner at a historic Berlin venue near Gendarmenmarkt. Invited speakers and registered delegates." }
+      ]
+    },
+    {
+      day: "Day 3 — Sat 20 Sept",
+      sessions: [
+        { time:"09:00", title:"Keynote: Policy Evaluation in the Digital State", speaker:"Prof. Dr. Jean-Pierre Dubois (Universität Zürich)", type:"keynote", room:"Main Auditorium", detail:"An evidence-based analysis of how digitalisation is transforming policy evaluation capacity in federal states, drawing on Swiss and German case evidence." },
+        { time:"10:30", title:"Track T–03: Ethics of AI — Roundtable", speaker:"Moderated by Prof. Jelena Vuković (WU Vienna)", type:"panel", room:"Hall B", detail:"Cross-disciplinary roundtable with representatives from law, computer science, sociology, and philosophy on building accountable AI systems." },
+        { time:"12:00", title:"Lunch & Closing Poster Session", speaker:"Various", type:"poster", room:"Exhibition Hall", detail:"Final poster session and delegate networking." },
+        { time:"13:30", title:"Workshop: Open Science & Research Data Management", speaker:"Dr. Chidi Okonkwo (FU Berlin)", type:"workshop", room:"Room C1", detail:"Practical session on FAIR data principles, research data management plans, and open access publishing in the German academic landscape." },
+        { time:"15:00", title:"Track T–06: Development Cooperation Evaluation", speaker:"Panel of 4 presenters", type:"panel", room:"Hall B", detail:"Case studies of M&E frameworks in KfW and GIZ-financed projects, with critical reflections on complexity-aware evaluation approaches." },
+        { time:"16:30", title:"Closing Ceremony & Best Paper Awards", speaker:"Scientific Committee", type:"keynote", room:"Main Auditorium", detail:"Closing remarks, Best Paper Award presentation (Best Doctoral Paper, Best Full Paper, Best Interdisciplinary Contribution), and announcements for ISCC 2026." },
+        { time:"17:30", title:"Farewell Reception", speaker:"", type:"break", room:"Foyer A", detail:"" }
+      ]
+    }
+  ],
+
+  committee: [
+    { initial:"K", flag:"🇩🇪", name:"Prof. Dr. Katharina Müller", role:"Chair, Scientific Committee", institution:"Humboldt-Universität zu Berlin", bio:"Full Professor of Digital Governance and Public Administration. Former chair of the German Political Science Association's digital policy working group. 200+ publications in peer-reviewed journals.", tags:["Digital Governance","Policy Analysis","German Academia"], field:"governance", linkedin:"https://linkedin.com" },
+    { initial:"T", flag:"🇩🇪", name:"Prof. Dr. Thomas Hofmann", role:"Deputy Chair", institution:"Technische Universität München", bio:"Professor of Machine Learning and Artificial Intelligence. Co-founder of three AI start-ups and scientific advisor to the Bavarian state government on digitalisation strategy.", tags:["Artificial Intelligence","Machine Learning","Ethics"], field:"ai", linkedin:"https://linkedin.com" },
+    { initial:"A", flag:"🇦🇹", name:"Prof. Dr. Aizat Kydyralieva", role:"Track Lead: Sustainability", institution:"Universität Wien", bio:"Chair of Sustainability Science and Socio-Ecological Systems. Lead researcher on the ERC-funded NEXUS project examining water-food-energy governance in Central Europe.", tags:["Sustainability","Complex Systems","Vienna"], field:"sustainability", linkedin:"https://linkedin.com" },
+    { initial:"J", flag:"🇨🇭", name:"Prof. Dr. Jean-Pierre Dubois", role:"Track Lead: Policy Evaluation", institution:"Universität Zürich", bio:"Professor of Public Policy and Comparative Politics. Scientific director of the Swiss Evaluation Society and expert advisor to SECO on development programme evaluations.", tags:["Policy Evaluation","Comparative Politics","Swiss Academia"], field:"governance", linkedin:"https://linkedin.com" },
+    { initial:"R", flag:"🇨🇭", name:"Dr. Reto Schweizer", role:"Research Methods Lead", institution:"ETH Zürich — D-GESS", bio:"Senior researcher in quantitative social science and research methods. Developer of widely-used R packages for social network analysis and survey weighting.", tags:["Quantitative Methods","Data Science","Open Science"], field:"methods", linkedin:"https://linkedin.com" },
+    { initial:"M", flag:"🇦🇹", name:"Prof. Dr. María Rodríguez-Sanz", role:"Track Lead: Development", institution:"Universität Basel", bio:"Professor of International Development and Evaluation Studies. Former UNDP policy advisor and KfW evaluation panel member with extensive experience in Latin America and Africa.", tags:["Development Cooperation","M&E","Global South"], field:"development", linkedin:"https://linkedin.com" },
+    { initial:"J", flag:"🇦🇹", name:"Prof. Dr. Jelena Vuković", role:"Track Lead: Digital Education", institution:"WU Wien — Wirtschaftsuniversität", bio:"Professor of Educational Technology and Learning Science. Principal investigator on the DigiEd4ALL project (BMBWF-funded). Expert in learning analytics and adaptive learning systems.", tags:["EdTech","Learning Analytics","MOOCs"], field:"education", linkedin:"https://linkedin.com" },
+    { initial:"C", flag:"🇩🇪", name:"Dr. Chidi Okonkwo", role:"Open Science Coordinator", institution:"Freie Universität Berlin", bio:"Research group leader in Computational Social Science and Open Research practices. Board member of the Open Knowledge Foundation Germany.", tags:["Computational Science","Open Data","CSS"], field:"methods", linkedin:"https://linkedin.com" },
+    { initial:"A", flag:"🇩🇪", name:"Prof. Dr. Amina Ndiaye", role:"International Relations Lead", institution:"RWTH Aachen University", bio:"Professor of Data-Driven Decision Making and AI in Public Services. Holds dual appointments at RWTH and the African Institute for Mathematical Sciences. Co-PI on three EU Horizon projects.", tags:["AI Policy","Data Science","International"], field:"ai", linkedin:"https://linkedin.com" }
+  ],
+
+  deadlines: [
+    { event:"Abstract Submission Opens", date:"01 Apr 2025", urgent:false },
+    { event:"Abstract Submission Deadline", date:"30 Jun 2025", urgent:false },
+    { event:"Review Notification", date:"15 Jul 2025", urgent:false },
+    { event:"Full Paper Submission", date:"20 Aug 2025", urgent:true },
+    { event:"Early Bird Registration", date:"31 Jul 2025", urgent:true },
+    { event:"Standard Registration Closes", date:"05 Sep 2025", urgent:false },
+  ],
+
+  venues: [
+    { name:"Humboldt Forum", type:"Main Conference Venue", addr:"Schloßplatz 1, 10178 Berlin" },
+    { name:"Tieranatomisches Theater", type:"Evening Keynotes & Receptions", addr:"Philippstraße 13, 10115 Berlin" },
+    { name:"Henry Ford Building, FU Berlin", type:"Workshops & Breakout Sessions", addr:"Garystraße 35, 14195 Berlin" }
+  ]
+};
+
+/* ══════════════════════════════════════════
+   CANVAS: ANIMATED PARTICLE FIELD
+   (Pure JS / Canvas2D API)
+══════════════════════════════════════════ */
+(function initParticleField() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], mouseX = 0, mouseY = 0;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - .5) * .3;
+      this.vy = (Math.random() - .5) * .3;
+      this.r = Math.random() * 1.5 + .3;
+      this.alpha = Math.random() * .4 + .1;
+      this.hue = Math.random() > .7 ? 200 : 195; // cyan-blue spectrum
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      if(this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${this.hue},90%,70%,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for(let i = 0; i < 120; i++) particles.push(new Particle());
+
+  function drawConnections() {
+    for(let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const dx = p.x - mouseX, dy = p.y - mouseY;
+      const distMouse = Math.sqrt(dx*dx + dy*dy);
+      if(distMouse < 120) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(mouseX, mouseY);
+        ctx.strokeStyle = `rgba(61,214,245,${.15 * (1 - distMouse/120)})`;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+      for(let j = i+1; j < particles.length; j++) {
+        const q = particles[j];
+        const ddx = p.x - q.x, ddy = p.y - q.y;
+        const dist = Math.sqrt(ddx*ddx + ddy*ddy);
+        if(dist < 80) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(q.x, q.y);
+          ctx.strokeStyle = `rgba(74,143,255,${.08 * (1 - dist/80)})`;
+          ctx.lineWidth = .4;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    drawConnections();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ══════════════════════════════════════════
+   CANVAS: VENUE MAP (Schematic dot-map of Berlin)
+══════════════════════════════════════════ */
+(function initVenueMap() {
+  const canvas = document.getElementById('venueCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width = rect.width || 500;
+    H = canvas.height = rect.height || 380;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Schematic venue coordinates (relative 0-1)
+  const venues = [
+    { label:"Humboldt Forum", x:.52, y:.38, primary:true },
+    { label:"Tieranatomisches Theater", x:.48, y:.33, primary:false },
+    { label:"Henry Ford Building FU", x:.28, y:.62, primary:false }
+  ];
+
+  let t = 0;
+  function drawMap() {
+    t += .012;
+    ctx.clearRect(0, 0, W, H);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(74,143,255,.06)';
+    ctx.lineWidth = 1;
+    for(let gx = 0; gx < W; gx += 40) { ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+    for(let gy = 0; gy < H; gy += 40) { ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+
+    // Schematic roads (fixed lines)
+    ctx.strokeStyle = 'rgba(100,160,255,.15)';
+    ctx.lineWidth = 2;
+    // horizontal main
+    ctx.beginPath(); ctx.moveTo(0,.4*H); ctx.lineTo(W,.4*H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,.55*H); ctx.lineTo(W,.55*H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,.7*H); ctx.lineTo(W,.7*H); ctx.stroke();
+    // vertical
+    ctx.beginPath(); ctx.moveTo(.3*W,0); ctx.lineTo(.3*W,H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(.5*W,0); ctx.lineTo(.5*W,H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(.7*W,0); ctx.lineTo(.7*W,H); ctx.stroke();
+    // diagonal
+    ctx.strokeStyle = 'rgba(100,160,255,.08)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0,.2*H); ctx.lineTo(W,.65*H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,.8*H); ctx.lineTo(W,.3*H); ctx.stroke();
+
+    // Draw River Spree schematic
+    ctx.beginPath();
+    ctx.moveTo(0,.45*H);
+    ctx.bezierCurveTo(.2*W,.38*H, .4*W,.48*H, .6*W,.42*H);
+    ctx.bezierCurveTo(.75*W,.38*H, .9*W,.45*H, W,.43*H);
+    ctx.strokeStyle = 'rgba(61,214,245,.18)';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(61,214,245,.06)';
+    ctx.lineWidth = 14;
+    ctx.stroke();
+
+    // Spree label
+    ctx.fillStyle = 'rgba(61,214,245,.3)';
+    ctx.font = '500 9px IBM Plex Mono, monospace';
+    ctx.fillText('SPREE', .6*W+8, .4*H-6);
+
+    // Venue pins
+    venues.forEach((v, i) => {
+      const px = v.x * W, py = v.y * H;
+      const pulse = Math.sin(t + i * 1.5) * .5 + .5;
+
+      // Pulse ring
+      ctx.beginPath();
+      ctx.arc(px, py, 12 + pulse * 8, 0, Math.PI*2);
+      ctx.strokeStyle = v.primary ? `rgba(232,201,106,${.15 + pulse*.15})` : `rgba(61,214,245,${.1 + pulse*.12})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Pin circle
+      ctx.beginPath();
+      ctx.arc(px, py, v.primary ? 7 : 5, 0, Math.PI*2);
+      ctx.fillStyle = v.primary ? '#e8c96a' : '#3dd6f5';
+      ctx.shadowColor = v.primary ? '#e8c96a' : '#3dd6f5';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Label
+      ctx.fillStyle = v.primary ? '#e8c96a' : 'rgba(221,230,245,.7)';
+      ctx.font = `${v.primary ? 600 : 400} 9px IBM Plex Mono, monospace`;
+      ctx.fillText(v.label, px + 12, py + 4);
+    });
+
+    // North indicator
+    ctx.fillStyle = 'rgba(61,214,245,.5)';
+    ctx.font = '600 10px IBM Plex Mono, monospace';
+    ctx.fillText('N ↑', W - 36, 20);
+
+    // "BERLIN" watermark
+    ctx.font = '400 11px IBM Plex Mono, monospace';
+    ctx.fillStyle = 'rgba(100,160,255,.08)';
+    ctx.fillText('BERLIN', .38*W, .82*H);
+
+    requestAnimationFrame(drawMap);
+  }
+  drawMap();
+})();
+
+/* ══════════════════════════════════════════
+   CURSOR
+══════════════════════════════════════════ */
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function raf(){
+  rx+=(mx-rx)*.14; ry+=(my-ry)*.14;
+  curRing.style.left=rx+'px'; curRing.style.top=ry+'px';
+  requestAnimationFrame(raf);
+})();
+document.querySelectorAll('a,button,.theme-card,.member-card,.prog-row,.venue-card,.cf-btn,.prog-tab').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='12px';cur.style.height='12px';cur.style.background='#e8c96a';curRing.style.width='48px';curRing.style.height='48px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='6px';cur.style.height='6px';cur.style.background='var(--cyan)';curRing.style.width='32px';curRing.style.height='32px'});
+});
+
+/* ══════════════════════════════════════════
+   NAV SCROLL
+══════════════════════════════════════════ */
+window.addEventListener('scroll', () => document.getElementById('mainNav').classList.toggle('scrolled', scrollY > 60));
+
+/* ══════════════════════════════════════════
+   MOBILE NAV
+══════════════════════════════════════════ */
+function openMob(){document.getElementById('mobDrawer').classList.add('open');document.getElementById('mobOverlay').classList.add('open')}
+function closeMob(){document.getElementById('mobDrawer').classList.remove('open');document.getElementById('mobOverlay').classList.remove('open')}
+
+/* ══════════════════════════════════════════
+   COUNTDOWN TIMER
+══════════════════════════════════════════ */
+(function countdown(){
+  const target = new Date('2025-06-30T23:59:59');
+  function tick(){
+    const now = new Date(), diff = target - now;
+    if(diff <= 0){
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='00');
+      return;
+    }
+    const d = Math.floor(diff/864e5);
+    const h = Math.floor((diff%864e5)/36e5);
+    const m = Math.floor((diff%36e5)/6e4);
+    const s = Math.floor((diff%6e4)/1e3);
+    document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+
+/* ══════════════════════════════════════════
+   ANIMATED COUNTERS
+══════════════════════════════════════════ */
+function animateCounter(id, target, suffix='') {
+  let current = 0;
+  const step = Math.ceil(target / 60);
+  const el = document.getElementById(id);
+  const t = setInterval(()=>{
+    current = Math.min(current + step, target);
+    el.textContent = current + suffix;
+    if(current >= target) clearInterval(t);
+  }, 30);
+}
+// Trigger on hero visibility
+const heroObs = new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    animateCounter('cnt-papers', DATA.stats.papers, '+');
+    animateCounter('cnt-speakers', DATA.stats.speakers);
+    animateCounter('cnt-countries', DATA.stats.countries);
+    animateCounter('cnt-sessions', DATA.stats.sessions);
+    heroObs.disconnect();
+  }
+},{threshold:.3});
+const heroRight = document.querySelector('.hero-right');
+if(heroRight) heroObs.observe(heroRight);
+
+/* ══════════════════════════════════════════
+   TICKER RENDER
+══════════════════════════════════════════ */
+(function renderTicker(){
+  const track = document.getElementById('tickerTrack');
+  const items = [...DATA.tickerItems, ...DATA.tickerItems];
+  track.innerHTML = items.map(item=>
+    `<div class="t-item">${item}<div class="t-dot"></div></div>`
+  ).join('');
+})();
+
+/* ══════════════════════════════════════════
+   THEMES GRID RENDER
+══════════════════════════════════════════ */
+(function renderThemes(){
+  const grid = document.getElementById('themesGrid');
+  grid.innerHTML = DATA.themes.map((t,i)=>`
+    <div class="theme-card reveal rd${(i%3)+1}">
+      <div class="theme-num">${t.num}</div>
+      <h3 class="theme-title">${t.title}</h3>
+      <p class="theme-text">${t.text}</p>
+    </div>
+  `).join('');
+  observeReveal();
+})();
+
+/* ══════════════════════════════════════════
+   PROGRAM RENDER (tabbed, expandable rows)
+══════════════════════════════════════════ */
+(function renderProgram(){
+  const tabsEl = document.getElementById('progTabs');
+  const contentsEl = document.getElementById('progContents');
+  const typeLabels = {keynote:'Keynote',panel:'Panel',workshop:'Workshop',break:'Break / Social',poster:'Poster Session'};
+
+  tabsEl.innerHTML = DATA.program.map((d,i)=>
+    `<button class="prog-tab ${i===0?'active':''}" onclick="switchTab(${i})">${d.day}</button>`
+  ).join('');
+
+  contentsEl.innerHTML = DATA.program.map((day,di)=>`
+    <div class="prog-content ${di===0?'active':''}" id="progContent${di}">
+      <div class="prog-day-header"><span>Time</span><span>Session</span><span>Type</span><span>Room</span></div>
+      <div class="prog-rows">
+        ${day.sessions.map((s,si)=>`
+          <div class="prog-row" onclick="toggleRow(this)">
+            <span class="prog-time">${s.time}</span>
+            <div class="prog-title-wrap">
+              <div class="prog-title">${s.title}</div>
+              ${s.speaker?`<div class="prog-speaker-name">${s.speaker}</div>`:''}
+              ${s.detail?`<div class="prog-detail">${s.detail}</div>`:''}
+            </div>
+            <span class="prog-type-badge badge-${s.type}">${typeLabels[s.type]}</span>
+            <span class="prog-room">${s.room}</span>
+            <span class="prog-arrow">${s.detail?'›':''}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+})();
+
+window.switchTab = function(idx){
+  document.querySelectorAll('.prog-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.prog-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
+};
+window.toggleRow = function(row){
+  const detail = row.querySelector('.prog-detail');
+  if(detail) row.classList.toggle('expanded');
+};
+
+/* ══════════════════════════════════════════
+   COMMITTEE RENDER + FILTER
+══════════════════════════════════════════ */
+(function renderCommittee(){
+  const fields = ['all',...new Set(DATA.committee.map(m=>m.field))];
+  const fieldLabels = {all:'All',governance:'Governance',ai:'AI & CS',sustainability:'Sustainability',methods:'Methods',development:'Development',education:'Education'};
+
+  document.getElementById('committeeFilter').innerHTML = fields.map(f=>
+    `<button class="cf-btn ${f==='all'?'active':''}" onclick="filterCommittee('${f}')">${fieldLabels[f]||f}</button>`
+  ).join('');
+
+  renderMemberCards(DATA.committee);
+})();
+
+function renderMemberCards(members){
+  const bgs = ['mhbg-1','mhbg-2','mhbg-3','mhbg-4','mhbg-5','mhbg-6','mhbg-7','mhbg-8','mhbg-9'];
+  document.getElementById('committeeGrid').innerHTML = members.map((m,i)=>`
+    <div class="member-card reveal rd${(i%3)+1}" data-field="${m.field}" style="animation:fadeIn .4s ${i*.08}s both">
+      <div class="member-header ${bgs[i%9]}">
+        <span class="member-initial">${m.initial}</span>
+        <span class="member-flag">${m.flag}</span>
+      </div>
+      <div class="member-body">
+        <div class="member-name">${m.name}</div>
+        <div class="member-role">${m.role}</div>
+        <div class="member-institution">${m.institution}</div>
+        <p class="member-bio">${m.bio}</p>
+        <div class="member-tags">${m.tags.map(t=>`<span class="m-tag">${t}</span>`).join('')}</div>
+        <a href="${m.linkedin}" target="_blank" class="member-linkedin">↗ LinkedIn Profile</a>
+      </div>
+    </div>
+  `).join('');
+  observeReveal();
+}
+
+window.filterCommittee = function(field){
+  document.querySelectorAll('.cf-btn').forEach(b=>b.classList.toggle('active', b.textContent.trim()===({all:'All',governance:'Governance',ai:'AI & CS',sustainability:'Sustainability',methods:'Methods',development:'Development',education:'Education'}[field]||field)));
+  const filtered = field==='all' ? DATA.committee : DATA.committee.filter(m=>m.field===field);
+  renderMemberCards(filtered);
+};
+
+/* ══════════════════════════════════════════
+   DEADLINES RENDER
+══════════════════════════════════════════ */
+(function renderDeadlines(){
+  document.getElementById('deadlineList').innerHTML = DATA.deadlines.map(d=>
+    `<li class="dl-item ${d.urgent?'urgent':''}">
+      <span class="dl-event">${d.event}</span>
+      <span class="dl-date">${d.date}</span>
+    </li>`
+  ).join('');
+})();
+
+/* ══════════════════════════════════════════
+   ABSTRACT FORM — populate track select
+══════════════════════════════════════════ */
+(function populateTrackSelect(){
+  const sel = document.getElementById('trackSelect');
+  DATA.themes.forEach(t=>{
+    const opt = document.createElement('option');
+    opt.value = t.num;
+    opt.textContent = `${t.num}: ${t.title}`;
+    sel.appendChild(opt);
+  });
+})();
+
+/* ══════════════════════════════════════════
+   WORD COUNTER (JS)
+══════════════════════════════════════════ */
+window.updateWordCount = function(el){
+  const words = el.value.trim().split(/\s+/).filter(w=>w.length>0).length;
+  const pct = Math.min(words/500, 1);
+  const bar = document.getElementById('progBar');
+  const cnt = document.getElementById('charCount');
+  bar.style.width = (pct*100)+'%';
+  cnt.textContent = `(${words} / 500 words)`;
+  if(words < 300){ bar.style.background='var(--blue)'; cnt.style.color='var(--text-dim)'; }
+  else if(words <= 500){ bar.style.background='var(--cyan)'; cnt.style.color='var(--cyan)'; }
+  else{ bar.style.background='var(--red)'; cnt.style.color='var(--red)'; }
+};
+
+/* ══════════════════════════════════════════
+   FORM SUBMISSIONS
+══════════════════════════════════════════ */
+window.handleFormSubmit = function(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitAbstractBtn');
+  btn.textContent = 'Submitting…'; btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('formSuccess').style.display='block';
+    btn.textContent='✓ Submitted';
+    btn.style.background='#2aaa60';
+    document.getElementById('abstractForm').querySelectorAll('input,select,textarea').forEach(el=>el.disabled=true);
+  }, 1200);
+  return false;
+};
+
+window.handleContactSubmit = function(e){
+  e.preventDefault();
+  const btn = document.getElementById('contactBtn');
+  btn.textContent='Sending…'; btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('contactSuccess').style.display='block';
+    btn.textContent='✓ Sent'; btn.style.background='#2aaa60';
+  }, 900);
+  return false;
+};
+
+/* ══════════════════════════════════════════
+   VENUE CARDS RENDER
+══════════════════════════════════════════ */
+(function renderVenues(){
+  document.getElementById('venueCards').innerHTML = DATA.venues.map((v,i)=>`
+    <div class="venue-card ${i===0?'active':''}" onclick="document.querySelectorAll('.venue-card').forEach(c=>c.classList.remove('active'));this.classList.add('active')">
+      <div class="vc-name">${v.name}</div>
+      <div class="vc-type">${v.type}</div>
+      <div class="vc-addr">${v.addr}</div>
+    </div>
+  `).join('');
+})();
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+function observeReveal(){
+  document.querySelectorAll('.reveal:not(.observed)').forEach(el=>{
+    el.classList.add('observed');
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); });
+    },{threshold:.08});
+    obs.observe(el);
+  });
+}
+observeReveal();
+</script>
+</body>
+</html>
